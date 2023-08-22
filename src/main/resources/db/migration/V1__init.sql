@@ -59,8 +59,7 @@ ALTER TABLE public.debt_type OWNER TO postgres;
 -- DROP TABLE IF EXISTS public.contact CASCADE;
 create TABLE public.contact (
                                 id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-                                "name" varchar(70),
-                                surname varchar(70),
+                                "name" varchar(140),
                                 ph_number varchar(20),
                                 bank_card_number numeric(16),
                                 note varchar(500),

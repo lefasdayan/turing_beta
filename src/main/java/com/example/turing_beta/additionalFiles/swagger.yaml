@@ -1,0 +1,952 @@
+openapi: 3.0.3
+info:
+  title: Менеджер бюджета
+  description: |-
+    CRUD для личного проекта
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://localhost:8080/api/v1
+tags:
+  - name: transaction
+    description: Всё о совершенных операциях
+  - name: debt
+    description: Доступ к долгам
+  - name: contact
+    description: Доступ к контактам
+  - name: account
+    description: Доступ к своим счетам
+paths:
+  /transactions:
+    get:
+      summary: Метод получения всех транзакций
+      tags:
+        - transaction
+      operationId: getAllTransactions
+      responses:
+        '200':
+          description: Успешный ответ со списком всех транзакций
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transactions"
+    post:
+      summary: Метод добавления транзакции
+      tags:
+        - transaction
+      operationId: addTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionWithoutJoins"
+      responses:
+        '200':
+          description: Успешный ответ с одной транзакцией
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+  /transactions/{id}:
+    get:
+      summary: Метод получения одной транзакции по ID
+      tags:
+        - transaction
+      operationId: getTransactionById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор транзакции
+          schema:
+            type: number
+          example: 132
+      responses:
+        '200':
+          description: Успешный ответ с одной транзакцией
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+        '404':
+          description: Транзакция не найдена
+    put:
+      summary: Метод обновления транзакции по ID
+      tags:
+        - transaction
+      operationId: updateTransactionById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор транзакции
+          schema:
+            type: number
+          example: 132
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionWithoutJoins"
+      responses:
+        '200':
+          description: Успешный ответ с одной транзакцией
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+        '404':
+          description: Транзакция не найдена
+    delete:
+      summary: Метод удаления одной транзакции по ID
+      tags:
+        - transaction
+      operationId: deleteTransactionById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор транзакции
+          schema:
+            type: number
+          example: 132
+      responses:
+        '200':
+          description: Успешный ответ с одной транзакцией
+          content:
+            application/json: { }
+        '404':
+          description: Транзакция не найдена
+
+
+  /debt:
+    get:
+      summary: Метод получения списка долгов
+      tags:
+        - debt
+      operationId: getAllDebts
+      responses:
+        '200':
+          description: Успешный ответ со списком всех долгов
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Debts"
+    post:
+      summary: Метод добавления долга
+      tags:
+        - debt
+      operationId: addDebt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DebtWithoutJoins"
+      responses:
+        '200':
+          description: Успешный ответ с одним долгом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Debt"
+  /debt/{id}:
+    get:
+      summary: Метод получения долга по ID
+      tags:
+        - debt
+      operationId: getDebtById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор долга
+          schema:
+            type: number
+          example: 132
+      responses:
+        '200':
+          description: Успешный ответ с одним долгом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Debt"
+        '404':
+          description: Долг не найден
+    put:
+      summary: Метод обновления долга по ID
+      tags:
+        - debt
+      operationId: updateDebtById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор долга
+          schema:
+            type: number
+          example: 132
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DebtWithoutJoins"
+      responses:
+        '200':
+          description: Успешный ответ с одним долгом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Debt"
+        '404':
+          description: Долг не найден
+    delete:
+      summary: Метод удаления одного долга по ID
+      tags:
+        - debt
+      operationId: deleteDebtById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор долга
+          schema:
+            type: number
+          example: 132
+      responses:
+        '200':
+          description: Успешный ответ с одним долгом
+          content:
+            application/json: { }
+        '404':
+          description: Долг не найден
+  /debt/contact/{name}:
+    get:
+      summary: Метод получения списка долга одного контакта
+      tags:
+        - debt
+      operationId: getAllDebtsByContactName
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Имя контакта
+          schema:
+            type: string
+          example: Дон Трамп
+      responses:
+        '200':
+          description: Успешный ответ с одним долгом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Debts"
+        '404':
+          description: Долги не найдены
+
+  /contact:
+    get:
+      summary: Метод получения списка контактов
+      tags:
+        - contact
+      operationId: getAllContacts
+      responses:
+        '200':
+          description: Успешный ответ со списком всех контактов
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contacts"
+    post:
+      summary: Метод добавления контакта
+      tags:
+        - contact
+      operationId: addContact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Contact"
+      responses:
+        '200':
+          description: Успешный ответ с одним контактом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+  /contact/{id}:
+    get:
+      summary: Метод получения контакта по ID
+      tags:
+        - contact
+      operationId: getContactById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор контакта
+          schema:
+            type: number
+          example: 132
+      responses:
+        '200':
+          description: Успешный ответ с одним контактом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        '404':
+          description: Контакт не найден
+    put:
+      summary: Метод обновления контакта по ID
+      tags:
+        - contact
+      operationId: updateContactById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор контакта
+          schema:
+            type: number
+          example: 132
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Contact"
+      responses:
+        '200':
+          description: Успешный ответ с одним контактом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        '404':
+          description: Контакт не найден
+    delete:
+      summary: Метод удаления одного контакта по ID
+      tags:
+        - contact
+      operationId: deleteContactById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор контакта
+          schema:
+            type: number
+          example: 132
+      responses:
+        '200':
+          description: Успешный ответ с одним контактом
+          content:
+            application/json: { }
+        '404':
+          description: Контакт не найден
+  /contact/name/{name}:
+    get:
+      summary: Метод получения контакта по имени
+      tags:
+        - contact
+      operationId: getContactByName
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Имя контакта
+          schema:
+            type: string
+          example: Дон Трамп
+      responses:
+        '200':
+          description: Успешный ответ с одним контактом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        '404':
+          description: Контакт не найден
+
+  /account:
+    get:
+      summary: Метод получения списка счетов
+      tags:
+        - account
+      operationId: getAllAccounts
+      responses:
+        '200':
+          description: Успешный ответ со списком всех счетов
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Accounts"
+    post:
+      summary: Метод добавления счета
+      tags:
+        - account
+      operationId: addAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountWithoutJoins"
+      responses:
+        '200':
+          description: Успешный ответ с одним счетом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+  /account/{id}:
+    get:
+      summary: Метод получения счета по ID
+      tags:
+        - account
+      operationId: getAccountById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор счета
+          schema:
+            type: number
+          example: 132
+      responses:
+        '200':
+          description: Успешный ответ с одним счетом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+        '404':
+          description: Счет не найден
+    patch:
+      summary: Метод обновления счета по ID
+      tags:
+        - account
+      operationId: updateAccountById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор счета
+          schema:
+            type: number
+          example: 132
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountWithoutJoins"
+      responses:
+        '200':
+          description: Успешный ответ с одним счетом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+        '404':
+          description: Счет не найден
+    delete:
+      summary: Метод удаления одного счета по ID
+      tags:
+        - account
+      operationId: deleteAccountById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор счета
+          schema:
+            type: number
+          example: 132
+      responses:
+        '200':
+          description: Успешный ответ с одним счетом
+          content:
+            application/json: { }
+        '404':
+          description: Счет не найден
+  /account/name/{name}:
+    get:
+      summary: Метод получения счета по его названию
+      tags:
+        - account
+      operationId: getAccountByName
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Название счета
+          schema:
+            type: string
+          example: Сбер МЭИ
+      responses:
+        '200':
+          description: Успешный ответ с одним счетом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+        '404':
+          description: Счет не найден
+
+  /debt_type:
+    get:
+      summary: Метод получения типов долгов
+      tags:
+        - debt_type
+      operationId: getAllDebtTypes
+      responses:
+        '200':
+          description: Успешный ответ со списком всех типов
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Debt_types"
+
+  /debt_type/{id}:
+    get:
+      summary: Метод получения типа долга по ID
+      tags:
+        - debt_type
+      operationId: getDebtTypeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор типа долга
+          schema:
+            type: number
+          example: 132
+      responses:
+        '200':
+          description: Успешный ответ с одним типом долга
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Debt_type"
+        '404':
+          description: Тип долга не найден
+
+  /debt_type/name/{name}:
+    get:
+      summary: Метод получения типа долга по названию
+      tags:
+        - debt_type
+      operationId: getDebtTypeByName
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Название типа долга
+          schema:
+            type: string
+          example: Входящий
+      responses:
+        '200':
+          description: Успешный ответ с одним типом долга
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Debt_type"
+        '404':
+          description: Тип долга не найден
+
+  /transaction_type:
+    get:
+      summary: Метод получения типов транзакций
+      tags:
+        - transaction_type
+      operationId: getAllTransactionTypes
+      responses:
+        '200':
+          description: Успешный ответ со списком всех типов
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction_types"
+    post:
+      summary: Метод добавления типа транзакции
+      tags:
+        - transaction_type
+      operationId: addTransactionType
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Transaction_type"
+      responses:
+        '200':
+          description: Успешный ответ с одним типом транзакции
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction_type"
+  /transaction_type/{id}:
+    get:
+      summary: Метод получения типа транзакции по ID
+      tags:
+        - transaction_type
+      operationId: getTransactionTypeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор типа транзакции
+          schema:
+            type: number
+          example: 132
+      responses:
+        '200':
+          description: Успешный ответ с одним типом транзакции
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction_type"
+        '404':
+          description: Тип транзакции не найден
+    put:
+      summary: Метод обновления типа транзакции по ID
+      tags:
+        - transaction_type
+      operationId: updateTransactionTypeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор типа транзакции
+          schema:
+            type: number
+          example: 132
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Transaction_type"
+      responses:
+        '200':
+          description: Успешный ответ с одним типом транзакции
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction_type"
+        '404':
+          description: Тип транзакции не найден
+    delete:
+      summary: Метод удаления одного типа транзакции по ID
+      tags:
+        - transaction_type
+      operationId: deleteTransactionTypeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор типа транзакции
+          schema:
+            type: number
+          example: 132
+      responses:
+        '200':
+          description: Успешный ответ с одним счетом
+          content:
+            application/json: { }
+        '404':
+          description: Счет не найден
+  /transaction_type/name/{name}:
+    get:
+      summary: Метод получения типа транзакции по названию
+      tags:
+        - transaction_type
+      operationId: getTransactionTypeByName
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Название типа транзакции
+          schema:
+            type: string
+          example: "Стипендия"
+      responses:
+        '200':
+          description: Успешный ответ с одним типом транзакции
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction_type"
+        '404':
+          description: Тип транзакции не найден
+
+components:
+  schemas:
+    Transaction:
+      type: object
+      required:
+        - name
+        - amount
+        - currency_name
+      properties:
+        id:
+          type: number
+          example: 12
+        name:
+          type: string
+          example: Плата за уведомления
+        amount:
+          type: number
+          example: 122.99
+        currency_name:
+          $ref: "#/components/schemas/Currency/properties/name"
+        date_time:
+          type: string
+          format: 2023-07-23T15:00:00+01
+        type:
+          $ref: "#/components/schemas/Transaction_type/properties/name"
+        from_acc:
+          $ref: "#/components/schemas/Account/properties/name"
+        to_acc:
+          $ref: "#/components/schemas/Account/properties/name"
+
+    TransactionWithoutJoins:
+      type: object
+      required:
+        - name
+        - amount
+        - currency_name
+      properties:
+        id:
+          type: number
+          example: 12
+        name:
+          type: string
+          example: Плата за уведомления
+        amount:
+          type: number
+          example: 122.99
+        currency_id:
+          $ref: "#/components/schemas/Currency/properties/id"
+        date_time:
+          type: string
+          format: 2023-07-23T15:00:00+01
+        type_id:
+          $ref: "#/components/schemas/Transaction_type/properties/id"
+        from_acc_id:
+          $ref: "#/components/schemas/Account/properties/id"
+        to_acc_id:
+          $ref: "#/components/schemas/Account/properties/id"
+
+    Transactions:
+      type: array
+      items:
+        $ref: "#/components/schemas/Transaction"
+
+    Debt:
+      type: object
+      required:
+        - name
+        - amount
+        - currency_name
+      properties:
+        id:
+          type: number
+          example: 12
+        name:
+          type: string
+          example: Долг за ресторан
+        amount:
+          type: number
+          example: 122.99
+        currency_name:
+          $ref: "#/components/schemas/Currency/properties/name"
+        date_start:
+          type: string
+          format: 2023-07-23T15:00:00+01
+        date_due:
+          type: string
+          format: 2023-07-23T15:00:00+01
+        contact:
+          $ref: "#/components/schemas/Contact/properties/name"
+        type:
+          $ref: "#/components/schemas/Debt_type/properties/name"
+
+    DebtWithoutJoins:
+      type: object
+      required:
+        - name
+        - amount
+        - currency_name
+      properties:
+        id:
+          type: number
+          example: 12
+        name:
+          type: string
+          example: Долг за ресторан
+        amount:
+          type: number
+          example: 122.99
+        currency_name:
+          $ref: "#/components/schemas/Currency/properties/id"
+        date_start:
+          type: string
+          format: 2023-07-23T15:00:00+01
+        date_due:
+          type: string
+          format: 2023-07-23T15:00:00+01
+        contact:
+          $ref: "#/components/schemas/Contact/properties/id"
+        type:
+          $ref: "#/components/schemas/Debt_type/properties/id"
+
+    Debts:
+      type: array
+      items:
+        $ref: "#/components/schemas/Debt"
+
+    Contact:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: number
+          example: 12
+        name:
+          type: string
+          example: Дон Трамп
+        ph_number:
+          type: string
+          example: +78005553535
+        bank_card_number:
+          type: number
+          example: 2202002123256666
+        note:
+          type: string
+          format: Переводить на тиньк через сбп
+
+    Contacts:
+      type: array
+      items:
+        $ref: "#/components/schemas/Contact"
+
+    Account:
+      type: object
+      required:
+        - name
+        - amount
+        - currency_name
+      properties:
+        id:
+          type: number
+          example: 12
+        name:
+          type: string
+          example: Сбер-МЭИ карта
+        amount:
+          type: number
+          example: 15000
+        currency_name:
+          $ref: "#/components/schemas/Currency/properties/name"
+        bank_name:
+          type: string
+          example: Тинькофф
+
+    AccountWithoutJoins:
+      type: object
+      required:
+        - name
+        - amount
+        - currency_name
+      properties:
+        id:
+          type: number
+          example: 12
+        name:
+          type: string
+          example: Сбер-МЭИ карта
+        amount:
+          type: number
+          example: 15000
+        currency_name:
+          $ref: "#/components/schemas/Currency/properties/id"
+        bank_name:
+          type: string
+          example: Тинькофф
+
+    Accounts:
+      type: array
+      items:
+        $ref: "#/components/schemas/Account"
+
+
+    Currency:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 12
+        name:
+          type: string
+          example: Рубль
+        course_to_rubble:
+          type: number
+          example: 76.25
+
+    Currencies:
+      type: array
+      items:
+        $ref: "#/components/schemas/Currency"
+
+    Debt_type:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 12
+        name:
+          type: string
+          example: Исходящий
+        note:
+          type: string
+          example: Деньги, которые одолжил я
+
+    Debt_types:
+      type: array
+      items:
+        $ref: "#/components/schemas/Debt_type"
+
+    Transaction_type:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 12
+        name:
+          type: string
+          example: Стипендия
+        note:
+          type: string
+          example: Получение в 20х числах каждого месяца
+
+    Transaction_types:
+      type: array
+      items:
+        $ref: "#/components/schemas/Transaction_type"

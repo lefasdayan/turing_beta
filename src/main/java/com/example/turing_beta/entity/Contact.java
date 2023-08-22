@@ -18,16 +18,14 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "name", length = 70)
+    @Column(name = "name", length = 140)
     private String name;
-    @Column(name = "surname", length = 70)
-    private String surname;
     @Column(name = "ph_number", length = 20)
     private String phoneNumber;
     @Column(name = "bank_card_number", precision = 16)
     private BigDecimal bankCardNumber;
     @Column(name = "note", length = 500)
     private String note;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH, mappedBy = "contact")
-    List<Debt> debts;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "contact")
+    private List<Debt> debts;
 }

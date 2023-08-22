@@ -21,6 +21,6 @@ public class TransactionType {
     private String name;
     @Column(name = "note", length = 240)
     private String note;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH, mappedBy = "type")
-    List<Transaction> transactions;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "type")
+    private List<Transaction> transactions;
 }

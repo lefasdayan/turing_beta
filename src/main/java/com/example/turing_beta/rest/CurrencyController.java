@@ -1,36 +1,37 @@
 package com.example.turing_beta.rest;
 
 import com.example.turing_beta.entity.Currency;
-import com.example.turing_beta.repos.CurrencyRepo;
+import com.example.turing_beta.service.CurrencyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/currencies")
+@RequestMapping("api/v1/currency")
 @RequiredArgsConstructor
 public class CurrencyController {
-    private final CurrencyRepo currencyRepo;
+    private final CurrencyService currencyService;
 
     @GetMapping
-    @ResponseBody
-    public ResponseEntity<List<Currency>> getAllCurrencies(){
-        return new ResponseEntity<>(currencyRepo.findAll(), HttpStatusCode.valueOf(200));
+    public ResponseEntity<List<Currency>> getAllCurrencies() {
+        return ResponseEntity.ok(currencyService.getAll());
     }
 
     @GetMapping("/{id}")
-    @ResponseBody
-    public ResponseEntity<Currency> getById(@PathVariable Long id){
-        return new ResponseEntity<>(currencyRepo.findById(id).get(), HttpStatusCode.valueOf(200));
+    public ResponseEntity<Currency> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(currencyService.getById(id));
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Currency> getByName(@PathVariable String name) {
+        return ResponseEntity.ok(currencyService.getByName(name));
     }
 
     @PostMapping
-    @ResponseBody
-    public ResponseEntity<?> addNewCurrency(@RequestBody Currency currency){
-        currencyRepo.save(currency);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Currency> addCurrency(@RequestBody Currency currency) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(currencyService.add(currency));
     }
 }

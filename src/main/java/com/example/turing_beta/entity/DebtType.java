@@ -21,6 +21,6 @@ public class DebtType {
     private String name;
     @Column(name = "note", length = 240)
     private String note;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH, mappedBy = "debtType")
-    List<Debt> debts;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "debtType")
+    private List<Debt> debts;
 }
