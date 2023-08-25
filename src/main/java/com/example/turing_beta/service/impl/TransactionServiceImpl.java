@@ -11,6 +11,7 @@ import com.example.turing_beta.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -54,12 +55,9 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction delete(Transaction transaction) {
-        if (transaction.getId() != null && !transactionRepo.existsById(transaction.getId())) {
-            throw new TransactionNotFoundException(String.format("Cannot find transaction with id = %d", transaction.getId()));
-        }
-        transactionRepo.delete(transaction);
-        return transaction;
+    public void deleteById(Long id) {
+        Transaction transaction = getById(id);
+        transactionRepo.deleteById(id);
     }
 
     private void checkFieldsValidity(Transaction transaction)

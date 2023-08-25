@@ -14,7 +14,7 @@ public interface AccountService {
 
     Account save(Account account);
 
-    Account delete(Account account);
+    void deleteById(Long id);
 
     Account getByName(String name);
 }

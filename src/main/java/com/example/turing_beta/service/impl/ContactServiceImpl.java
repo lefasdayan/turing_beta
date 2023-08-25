@@ -46,11 +46,9 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Contact delete(Contact contact) {
-        if (contact.getId() != null && !contactRepo.existsById(contact.getId())) {
-            throw new ContactNotFoundException(String.format("Cannot find contact with id = %d", contact.getId()));
-        }
-        return contact;
+    public void deleteById(Long id) {
+        Contact contact = getById(id);
+        contactRepo.deleteById(id);
     }
 
     @Override

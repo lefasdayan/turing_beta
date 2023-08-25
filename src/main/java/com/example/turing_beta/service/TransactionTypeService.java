@@ -15,5 +15,5 @@ public interface TransactionTypeService {
 
     TransactionType getByName(String name);
 
-    TransactionType delete(TransactionType transactionType);
+    void deleteById(Long id);
 }

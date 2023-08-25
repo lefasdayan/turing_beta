@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface DebtRepo extends JpaRepository<Debt, Long> {
     // todo @Query("select debt.name, debt.amount from debt join contact c on c.id = debt.contact_id where c.name like '%?%'")
-    List<Debt> findAllByContactName(String name);
+    List<Debt> findAllByContactId(Long id);
 }

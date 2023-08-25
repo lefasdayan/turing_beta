@@ -56,17 +56,14 @@ public class DebtServiceImpl implements DebtService {
     }
 
     @Override
-    public Debt delete(Debt debt) {
-        if (debt.getId() != null && !debtRepo.existsById(debt.getId())) {
-            throw new DebtNotFoundException(String.format("Cannot find debt with id = %d", debt.getId()));
-        }
-        debtRepo.delete(debt);
-        return debt;
+    public void deleteById(Long id) {
+        Debt debt = getById(id);
+        debtRepo.deleteById(id);
     }
 
     @Override
-    public List<Debt> getAllByContactName(String name) {
-        return debtRepo.findAllByContactName(name); //todo найти все долги какого-то контакта по его имени
+    public List<Debt> getAllByContactId(Long id) {
+        return debtRepo.findAllByContactId(id); //todo найти все долги какого-то контакта по его id
     }
 
     private void checkFieldsValidity(Debt debt) throws DebtFieldsEmptyException, AmountSetWrongException, DebtWrongDueDateException {

@@ -1,7 +1,7 @@
 package com.example.turing_beta.rest;
 
 import com.example.turing_beta.entity.Debt;
-import com.example.turing_beta.service.impl.DebtServiceImpl;
+import com.example.turing_beta.service.DebtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/api/v1/debt")
 @RequiredArgsConstructor
 public class DebtController {
-    private final DebtServiceImpl debtService;
+    private final DebtService debtService;
 
     @GetMapping
     public ResponseEntity<List<Debt>> getAllDebts() {
@@ -35,10 +35,11 @@ public class DebtController {
         return ResponseEntity.ok(debtService.save(debt));
     }
 
-    @DeleteMapping
-    public ResponseEntity<Debt> deleteDebt(@RequestBody Debt debt) {
-        return ResponseEntity.ok(debtService.delete(debt));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteDebt(@PathVariable Long id) {
+        debtService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
-    // todo getAllByContactName
+    // todo getAllByContactId
 }

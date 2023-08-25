@@ -40,8 +40,9 @@ public class TransactionTypeController {
         return ResponseEntity.ok(transactionTypeService.getByName(name));
     }
 
-    @DeleteMapping
-    public ResponseEntity<TransactionType> deleteTransactionType(@RequestBody TransactionType transactionType){
-        return ResponseEntity.ok(transactionTypeService.delete(transactionType));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTransactionType(@PathVariable Long id){
+        transactionTypeService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

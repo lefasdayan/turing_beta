@@ -67,11 +67,8 @@ public class TransactionTypeServiceImpl implements TransactionTypeService {
     }
 
     @Override
-    public TransactionType delete(TransactionType transactionType) {
-        if (transactionType.getId() != null && !transactionTypeRepo.existsById(transactionType.getId())) {
-            throw new TransactionTypeNotFoundException(String.format("Cannot find debt with id = %d", transactionType.getId()));
-        }
-        transactionTypeRepo.delete(transactionType);
-        return transactionType;
+    public void deleteById(Long id) {
+        TransactionType transactionType = getById(id);
+        transactionTypeRepo.deleteById(id);
     }
 }

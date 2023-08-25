@@ -13,7 +13,7 @@ public interface TransactionService {
 
     Transaction save(Transaction transaction);
 
-    Transaction delete(Transaction transaction);
+    void deleteById(Long id);
 
     //todo обновление счета при проведении транзакции? (внесена транзакция на поступление -- на соотв. счете увеличивается amount)
     // (проблема при обновлении суммы транзакции: нужно сначала откатить старую сумму, потом обновить счет с новой

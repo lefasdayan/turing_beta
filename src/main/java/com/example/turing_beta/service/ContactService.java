@@ -11,7 +11,7 @@ public interface ContactService {
 
     Contact save(Contact contact);
 
-    Contact delete(Contact contact);
+    void deleteById(Long id);
 
     Contact getById(Long id);
     Contact getByName(String name);

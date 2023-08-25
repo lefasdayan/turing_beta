@@ -56,6 +56,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Transaction"
+    put:
+      summary: Метод обновления транзакции
+      tags:
+        - transaction
+      operationId: updateTransactionById
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionWithoutJoins"
+      responses:
+        '200':
+          description: Успешный ответ с одной транзакцией
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+        '404':
+          description: Транзакция не найдена
+
   /transactions/{id}:
     get:
       summary: Метод получения одной транзакции по ID
@@ -79,11 +100,11 @@ paths:
                 $ref: "#/components/schemas/Transaction"
         '404':
           description: Транзакция не найдена
-    put:
-      summary: Метод обновления транзакции по ID
+    delete:
+      summary: Метод удаления одной транзакции
       tags:
         - transaction
-      operationId: updateTransactionById
+      operationId: deleteTransaction
       parameters:
         - name: id
           in: path
@@ -92,12 +113,6 @@ paths:
           schema:
             type: number
           example: 132
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TransactionWithoutJoins"
       responses:
         '200':
           description: Успешный ответ с одной транзакцией
@@ -107,28 +122,6 @@ paths:
                 $ref: "#/components/schemas/Transaction"
         '404':
           description: Транзакция не найдена
-    delete:
-      summary: Метод удаления одной транзакции по ID
-      tags:
-        - transaction
-      operationId: deleteTransactionById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: Идентификатор транзакции
-          schema:
-            type: number
-          example: 132
-      responses:
-        '200':
-          description: Успешный ответ с одной транзакцией
-          content:
-            application/json: { }
-        '404':
-          description: Транзакция не найдена
-
-
   /debt:
     get:
       summary: Метод получения списка долгов
@@ -160,6 +153,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Debt"
+    put:
+      summary: Метод обновления долга
+      tags:
+        - debt
+      operationId: updateDebt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DebtWithoutJoins"
+      responses:
+        '200':
+          description: Успешный ответ с одним долгом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Debt"
+        '404':
+          description: Долг не найден
   /debt/{id}:
     get:
       summary: Метод получения долга по ID
@@ -183,11 +196,11 @@ paths:
                 $ref: "#/components/schemas/Debt"
         '404':
           description: Долг не найден
-    put:
-      summary: Метод обновления долга по ID
+    delete:
+      summary: Метод удаления одного долга
       tags:
         - debt
-      operationId: updateDebtById
+      operationId: deleteDebt
       parameters:
         - name: id
           in: path
@@ -196,12 +209,6 @@ paths:
           schema:
             type: number
           example: 132
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DebtWithoutJoins"
       responses:
         '200':
           description: Успешный ответ с одним долгом
@@ -211,43 +218,24 @@ paths:
                 $ref: "#/components/schemas/Debt"
         '404':
           description: Долг не найден
-    delete:
-      summary: Метод удаления одного долга по ID
+
+  /debt/contact/{id}:
+    get:
+      summary: Метод получения списка долгов одного контакта
       tags:
         - debt
-      operationId: deleteDebtById
+      operationId: getAllDebtsByContactId
       parameters:
         - name: id
           in: path
           required: true
-          description: Идентификатор долга
+          description: ID контакта
           schema:
             type: number
-          example: 132
+          example: 12
       responses:
         '200':
-          description: Успешный ответ с одним долгом
-          content:
-            application/json: { }
-        '404':
-          description: Долг не найден
-  /debt/contact/{name}:
-    get:
-      summary: Метод получения списка долга одного контакта
-      tags:
-        - debt
-      operationId: getAllDebtsByContactName
-      parameters:
-        - name: name
-          in: path
-          required: true
-          description: Имя контакта
-          schema:
-            type: string
-          example: Дон Трамп
-      responses:
-        '200':
-          description: Успешный ответ с одним долгом
+          description: Успешный ответ со списком долгов
           content:
             application/json:
               schema:
@@ -286,6 +274,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Contact"
+    put:
+      summary: Метод обновления контакта
+      tags:
+        - contact
+      operationId: updateContact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Contact"
+      responses:
+        '200':
+          description: Успешный ответ с одним контактом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        '404':
+          description: Контакт не найден
   /contact/{id}:
     get:
       summary: Метод получения контакта по ID
@@ -309,11 +317,11 @@ paths:
                 $ref: "#/components/schemas/Contact"
         '404':
           description: Контакт не найден
-    put:
-      summary: Метод обновления контакта по ID
+    delete:
+      summary: Метод удаления одного контакта
       tags:
         - contact
-      operationId: updateContactById
+      operationId: deleteContact
       parameters:
         - name: id
           in: path
@@ -322,12 +330,6 @@ paths:
           schema:
             type: number
           example: 132
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Contact"
       responses:
         '200':
           description: Успешный ответ с одним контактом
@@ -335,26 +337,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Contact"
-        '404':
-          description: Контакт не найден
-    delete:
-      summary: Метод удаления одного контакта по ID
-      tags:
-        - contact
-      operationId: deleteContactById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: Идентификатор контакта
-          schema:
-            type: number
-          example: 132
-      responses:
-        '200':
-          description: Успешный ответ с одним контактом
-          content:
-            application/json: { }
         '404':
           description: Контакт не найден
   /contact/name/{name}:
@@ -380,7 +362,42 @@ paths:
                 $ref: "#/components/schemas/Contact"
         '404':
           description: Контакт не найден
-
+  /currency:
+    get:
+      summary: Метод получения списка валют
+      tags:
+        - currency
+      operationId: getAllCurrencies
+      responses:
+        '200':
+          description: Успешный ответ со списком всех валют
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Currencies"
+  /currency/{id}:
+    get:
+      summary: Метод получения валюты по ID
+      tags:
+        - currency
+      operationId: getCurrencyById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор валюты
+          schema:
+            type: number
+          example: 132
+      responses:
+        '200':
+          description: Успешный ответ с одной валютой
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Currency"
+        '404':
+          description: Валюта не найдена
   /account:
     get:
       summary: Метод получения списка счетов
@@ -412,6 +429,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Account"
+    patch:
+      summary: Метод обновления счета
+      tags:
+        - account
+      operationId: updateAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountWithoutJoins"
+      responses:
+        '200':
+          description: Успешный ответ с одним счетом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+        '404':
+          description: Счет не найден
   /account/{id}:
     get:
       summary: Метод получения счета по ID
@@ -435,11 +472,11 @@ paths:
                 $ref: "#/components/schemas/Account"
         '404':
           description: Счет не найден
-    patch:
-      summary: Метод обновления счета по ID
+    delete:
+      summary: Метод удаления одного счета
       tags:
         - account
-      operationId: updateAccountById
+      operationId: deleteAccount
       parameters:
         - name: id
           in: path
@@ -461,26 +498,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Account"
-        '404':
-          description: Счет не найден
-    delete:
-      summary: Метод удаления одного счета по ID
-      tags:
-        - account
-      operationId: deleteAccountById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: Идентификатор счета
-          schema:
-            type: number
-          example: 132
-      responses:
-        '200':
-          description: Успешный ответ с одним счетом
-          content:
-            application/json: { }
         '404':
           description: Счет не найден
   /account/name/{name}:
@@ -600,6 +617,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Transaction_type"
+    put:
+      summary: Метод обновления типа транзакции
+      tags:
+        - transaction_type
+      operationId: updateTransactionType
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Transaction_type"
+      responses:
+        '200':
+          description: Успешный ответ с одним типом транзакции
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction_type"
+        '404':
+          description: Тип транзакции не найден
   /transaction_type/{id}:
     get:
       summary: Метод получения типа транзакции по ID
@@ -623,39 +660,10 @@ paths:
                 $ref: "#/components/schemas/Transaction_type"
         '404':
           description: Тип транзакции не найден
-    put:
-      summary: Метод обновления типа транзакции по ID
-      tags:
-        - transaction_type
-      operationId: updateTransactionTypeById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: Идентификатор типа транзакции
-          schema:
-            type: number
-          example: 132
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Transaction_type"
-      responses:
-        '200':
-          description: Успешный ответ с одним типом транзакции
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Transaction_type"
-        '404':
-          description: Тип транзакции не найден
     delete:
-      summary: Метод удаления одного типа транзакции по ID
-      tags:
+      summary: Метод удаления одного типа транзакции
         - transaction_type
-      operationId: deleteTransactionTypeById
+      operationId: deleteTransactionType
       parameters:
         - name: id
           in: path
@@ -668,7 +676,9 @@ paths:
         '200':
           description: Успешный ответ с одним счетом
           content:
-            application/json: { }
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction_type"
         '404':
           description: Счет не найден
   /transaction_type/name/{name}:

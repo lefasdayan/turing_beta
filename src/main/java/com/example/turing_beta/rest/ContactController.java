@@ -1,7 +1,7 @@
 package com.example.turing_beta.rest;
 
 import com.example.turing_beta.entity.Contact;
-import com.example.turing_beta.service.impl.ContactServiceImpl;
+import com.example.turing_beta.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/api/v1/contact")
 @RequiredArgsConstructor
 public class ContactController {
-    private final ContactServiceImpl contactService;
+    private final ContactService contactService;
 
     @GetMapping
     public ResponseEntity<List<Contact>> getAllContacts(){
@@ -30,9 +30,10 @@ public class ContactController {
         return ResponseEntity.ok(contactService.save(contact));
     }
 
-    @DeleteMapping
-    public ResponseEntity<Contact> deleteContact(@RequestBody Contact contact){
-        return ResponseEntity.ok(contactService.delete(contact));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteContact(@PathVariable Long id){
+        contactService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")

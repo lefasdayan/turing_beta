@@ -14,8 +14,8 @@ public interface DebtService {
 
     Debt save(Debt debt);
 
-    Debt delete(Debt debt);
-    List<Debt> getAllByContactName(String name);
+    void deleteById(Long id);
+    List<Debt> getAllByContactId(Long id);
 
     //todo внесение сразу нескольких долгов по одной транзакции (счет в кафе делится между несоклькими людьми.
     // на вход транзакция айди, массив контактов и массив денег, сколько каждый контакт должен, в соответствующем порядке)

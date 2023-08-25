@@ -56,12 +56,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account delete(Account account) {
-        if (account.getId() != null && !accountRepo.existsById(account.getId())) {
-            throw new AccountNotFoundException(String.format("Cannot find account with id = %d", account.getId()));
-        }
-        accountRepo.delete(account);
-        return account;
+    public void deleteById(Long id) {
+        Account account = getById(id);
+        accountRepo.deleteById(id);
     }
 
     @Override

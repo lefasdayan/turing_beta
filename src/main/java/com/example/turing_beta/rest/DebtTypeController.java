@@ -1,7 +1,7 @@
 package com.example.turing_beta.rest;
 
 import com.example.turing_beta.entity.DebtType;
-import com.example.turing_beta.service.impl.DebtTypeServiceImpl;
+import com.example.turing_beta.service.DebtTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/v1/debt_type")
 @RequiredArgsConstructor
 public class DebtTypeController {
-    private final DebtTypeServiceImpl debtTypeService;
+    private final DebtTypeService debtTypeService;
 
     @GetMapping
     public ResponseEntity<List<DebtType>> getAllDebtTypes() {

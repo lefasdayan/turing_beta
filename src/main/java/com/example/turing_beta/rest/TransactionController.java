@@ -1,10 +1,9 @@
 package com.example.turing_beta.rest;
 
 import com.example.turing_beta.entity.Transaction;
-import com.example.turing_beta.service.impl.TransactionServiceImpl;
+import com.example.turing_beta.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +13,7 @@ import java.util.List;
 @RequestMapping("/api/v1/transaction")
 @RequiredArgsConstructor
 public class TransactionController {
-    private final TransactionServiceImpl transactionService;
+    private final TransactionService transactionService;
 
     @GetMapping
     public ResponseEntity<List<Transaction>> getAllTransactions(){
@@ -36,8 +35,9 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.save(transaction));
     }
 
-    @DeleteMapping
-    public ResponseEntity<Transaction> deleteTransaction(@RequestBody Transaction transaction){
-        return ResponseEntity.ok(transactionService.delete(transaction));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTransaction(@PathVariable Long id){
+        transactionService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }
