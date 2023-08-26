@@ -2,9 +2,9 @@ package com.example.turing_beta.service.impl;
 
 import com.example.turing_beta.entity.Debt;
 import com.example.turing_beta.exception.exceptions.common.AmountSetWrongException;
-import com.example.turing_beta.exception.exceptions.debt.DebtAlreadyExistsException;
-import com.example.turing_beta.exception.exceptions.debt.DebtFieldsEmptyException;
-import com.example.turing_beta.exception.exceptions.debt.DebtNotFoundException;
+import com.example.turing_beta.exception.exceptions.common.ObjectAlreadyExistsException;
+import com.example.turing_beta.exception.exceptions.common.ObjectFieldsEmptyException;
+import com.example.turing_beta.exception.exceptions.common.ObjectNotFoundException;
 import com.example.turing_beta.exception.exceptions.debt.DebtWrongDueDateException;
 import com.example.turing_beta.repos.DebtRepo;
 import com.example.turing_beta.service.DebtService;
@@ -29,11 +29,11 @@ public class DebtServiceImpl implements DebtService {
     @Override
     public Debt add(Debt debt) {
         if (debt.getId() != null && debtRepo.existsById(debt.getId())) {
-            throw new DebtAlreadyExistsException(String.format("Debt with id = %d already exists", debt.getId()));
+            throw new ObjectAlreadyExistsException(String.format("Debt with id = %d already exists", debt.getId()));
         }
         checkFieldsValidity(debt);
 
-        debtRepo.save(debt);
+        debt = debtRepo.save(debt);
         return debt;
     }
 
@@ -41,7 +41,7 @@ public class DebtServiceImpl implements DebtService {
     public Debt getById(Long id) {
         Optional<Debt> foundDebt = debtRepo.findById(id);
         if (foundDebt.isEmpty()) {
-            throw new DebtNotFoundException(String.format("Cannot find debt with id = %d", id));
+            throw new ObjectNotFoundException(String.format("Cannot find debt with id = %d", id));
         }
         return foundDebt.get();
     }
@@ -51,7 +51,7 @@ public class DebtServiceImpl implements DebtService {
         Debt debtFromDb = getById(debt.getId());
         checkFieldsValidity(debt);
 
-        debtRepo.save(debt);
+        debt = debtRepo.save(debt);
         return debt;
     }
 
@@ -66,11 +66,11 @@ public class DebtServiceImpl implements DebtService {
         return debtRepo.findAllByContactId(id); //todo найти все долги какого-то контакта по его id
     }
 
-    private void checkFieldsValidity(Debt debt) throws DebtFieldsEmptyException, AmountSetWrongException, DebtWrongDueDateException {
+    private void checkFieldsValidity(Debt debt) throws ObjectFieldsEmptyException, AmountSetWrongException, DebtWrongDueDateException {
         if (!StringUtils.hasText(debt.getName())
                 || debt.getAmount() == null
                 || debt.getCurrency() == null) {
-            throw new DebtFieldsEmptyException("Cannot add debt with empty field(s)");
+            throw new ObjectFieldsEmptyException("Cannot add debt with empty field(s)");
         }
         if (debt.getAmount().compareTo(BigDecimal.valueOf(0)) <= 0) {
             throw new AmountSetWrongException("Cannot add debt with amount less than or equal to 0");

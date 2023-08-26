@@ -1,9 +1,9 @@
 package com.example.turing_beta.service.impl;
 
 import com.example.turing_beta.entity.Contact;
-import com.example.turing_beta.exception.exceptions.contact.ContactAlreadyExistsException;
-import com.example.turing_beta.exception.exceptions.contact.ContactFieldsEmptyException;
-import com.example.turing_beta.exception.exceptions.contact.ContactNotFoundException;
+import com.example.turing_beta.exception.exceptions.common.ObjectAlreadyExistsException;
+import com.example.turing_beta.exception.exceptions.common.ObjectFieldsEmptyException;
+import com.example.turing_beta.exception.exceptions.common.ObjectNotFoundException;
 import com.example.turing_beta.repos.ContactRepo;
 import com.example.turing_beta.service.ContactService;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +26,12 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public Contact add(Contact contact) {
         if (contact.getId() != null && contactRepo.existsById(contact.getId())) {
-            throw new ContactAlreadyExistsException(String.format("Contact with id %d already exists", contact.getId()));
+            throw new ObjectAlreadyExistsException(String.format("Contact with id %d already exists", contact.getId()));
         }
         if (!StringUtils.hasText(contact.getName())) {
-            throw new ContactFieldsEmptyException("Cannot add contact with empty field(s)");
+            throw new ObjectFieldsEmptyException("Cannot add contact with empty field(s)");
         }
-        contactRepo.save(contact);
+        contact = contactRepo.save(contact);
         return contact;
     }
 
@@ -39,9 +39,9 @@ public class ContactServiceImpl implements ContactService {
     public Contact save(Contact contact) {
         Contact contactFromDb = getById(contact.getId());
         if (!StringUtils.hasText(contact.getName())) {
-            throw new ContactFieldsEmptyException("Cannot add contact with empty field(s)");
+            throw new ObjectFieldsEmptyException("Cannot add contact with empty field(s)");
         }
-        contactRepo.save(contact);
+        contact = contactRepo.save(contact);
         return contact;
     }
 
@@ -55,7 +55,7 @@ public class ContactServiceImpl implements ContactService {
     public Contact getById(Long id) {
         Optional<Contact> foundContact = contactRepo.findById(id);
         if (foundContact.isEmpty()) {
-            throw new ContactNotFoundException(String.format("Cannot find contact with id = %d", id));
+            throw new ObjectNotFoundException(String.format("Cannot find contact with id = %d", id));
         }
         return foundContact.get();
     }
@@ -64,7 +64,7 @@ public class ContactServiceImpl implements ContactService {
     public Contact getByName(String name) {
         Optional<Contact> foundContact = contactRepo.findByName(name);
         if (foundContact.isEmpty()) {
-            throw new ContactNotFoundException(String.format("Cannot find contact with name %s", name));
+            throw new ObjectNotFoundException(String.format("Cannot find contact with name %s", name));
         }
         return foundContact.get();
     }

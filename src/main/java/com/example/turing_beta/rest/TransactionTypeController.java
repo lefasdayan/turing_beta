@@ -16,32 +16,32 @@ public class TransactionTypeController {
     private final TransactionTypeService transactionTypeService;
 
     @GetMapping
-    public ResponseEntity<List<TransactionType>> getAllTransactionTypes(){
+    public ResponseEntity<List<TransactionType>> getAllTransactionTypes() {
         return ResponseEntity.ok(transactionTypeService.getAll());
     }
 
     @PostMapping
-    public ResponseEntity<TransactionType> addTransactionType(@RequestBody TransactionType transactionType){
+    public ResponseEntity<TransactionType> addTransactionType(@RequestBody TransactionType transactionType) {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionTypeService.add(transactionType));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TransactionType> getTransactionTypeById(@PathVariable Long id){
+    public ResponseEntity<TransactionType> getTransactionTypeById(@PathVariable Long id) {
         return ResponseEntity.ok(transactionTypeService.getById(id));
     }
 
     @PatchMapping
-    public ResponseEntity<TransactionType> updateTransactionType(@RequestBody TransactionType transactionType){
+    public ResponseEntity<TransactionType> updateTransactionType(@RequestBody TransactionType transactionType) {
         return ResponseEntity.ok(transactionTypeService.save(transactionType));
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<TransactionType> getTransactionTypeByName(@PathVariable String name){
+    public ResponseEntity<TransactionType> getTransactionTypeByName(@PathVariable String name) {
         return ResponseEntity.ok(transactionTypeService.getByName(name));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTransactionType(@PathVariable Long id){
+    public ResponseEntity<?> deleteTransactionType(@PathVariable Long id) {
         transactionTypeService.deleteById(id);
         return ResponseEntity.ok().build();
     }

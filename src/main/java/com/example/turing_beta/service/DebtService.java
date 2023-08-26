@@ -1,6 +1,5 @@
 package com.example.turing_beta.service;
 
-import com.example.turing_beta.entity.Contact;
 import com.example.turing_beta.entity.Debt;
 
 import java.util.List;
@@ -15,6 +14,7 @@ public interface DebtService {
     Debt save(Debt debt);
 
     void deleteById(Long id);
+
     List<Debt> getAllByContactId(Long id);
 
     //todo внесение сразу нескольких долгов по одной транзакции (счет в кафе делится между несоклькими людьми.

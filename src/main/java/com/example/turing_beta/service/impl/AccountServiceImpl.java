@@ -1,10 +1,10 @@
 package com.example.turing_beta.service.impl;
 
 import com.example.turing_beta.entity.Account;
-import com.example.turing_beta.exception.exceptions.account.AccountAlreadyExistsException;
-import com.example.turing_beta.exception.exceptions.account.AccountFieldsEmptyException;
-import com.example.turing_beta.exception.exceptions.account.AccountNotFoundException;
 import com.example.turing_beta.exception.exceptions.common.AmountSetWrongException;
+import com.example.turing_beta.exception.exceptions.common.ObjectAlreadyExistsException;
+import com.example.turing_beta.exception.exceptions.common.ObjectFieldsEmptyException;
+import com.example.turing_beta.exception.exceptions.common.ObjectNotFoundException;
 import com.example.turing_beta.repos.AccountRepo;
 import com.example.turing_beta.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +28,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account add(Account account) {
         if (account.getId() != null && accountRepo.existsById(account.getId())) {
-            throw new AccountAlreadyExistsException(String.format("Account with id = %d already exists", account.getId()));
+            throw new ObjectAlreadyExistsException(String.format("Account with id = %d already exists", account.getId()));
         }
         checkFieldsValidity(account);
 
-        accountRepo.save(account);
+        account = accountRepo.save(account);
         return account;
     }
 
@@ -40,7 +40,7 @@ public class AccountServiceImpl implements AccountService {
     public Account getById(Long id) {
         Optional<Account> foundAcc = accountRepo.findById(id);
         if (foundAcc.isEmpty()) {
-            throw new AccountNotFoundException(String.format("Cannot find account with id = %d", id));
+            throw new ObjectNotFoundException(String.format("Cannot find account with id = %d", id));
         }
         return foundAcc.get();
     }
@@ -51,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
 
         checkFieldsValidity(account);
 
-        accountRepo.save(account);
+        account = accountRepo.save(account);
         return account;
     }
 
@@ -65,19 +65,19 @@ public class AccountServiceImpl implements AccountService {
     public Account getByName(String name) {
         Optional<Account> foundAccount = accountRepo.findByName(name);
         if (foundAccount.isEmpty()) {
-            throw new AccountNotFoundException(String.format("Cannot find account with name %s", name));
+            throw new ObjectNotFoundException(String.format("Cannot find account with name %s", name));
         }
         return foundAccount.get();
     }
 
-    private void checkFieldsValidity(Account account) throws AccountFieldsEmptyException, AmountSetWrongException {
+    private void checkFieldsValidity(Account account) throws ObjectFieldsEmptyException, AmountSetWrongException {
         if (!StringUtils.hasText(account.getName())
                 || account.getAmount() == null
                 || account.getCurrency() == null) {
-            throw new AccountFieldsEmptyException("Cannot add account with empty field(s)");
+            throw new ObjectFieldsEmptyException("Cannot save account with empty field(s)");
         }
         if (account.getAmount().compareTo(BigDecimal.valueOf(0)) <= 0) {
-            throw new AmountSetWrongException("Cannot add account with amount bigger than or equal to 0");
+            throw new AmountSetWrongException("Cannot save account with amount bigger than or equal to 0");
         }
     }
 }

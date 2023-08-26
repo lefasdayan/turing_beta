@@ -14,5 +14,6 @@ public interface ContactService {
     void deleteById(Long id);
 
     Contact getById(Long id);
+
     Contact getByName(String name);
 }

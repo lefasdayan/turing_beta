@@ -1,9 +1,9 @@
 package com.example.turing_beta.service.impl;
 
 import com.example.turing_beta.entity.TransactionType;
-import com.example.turing_beta.exception.exceptions.transactionType.TransactionTypeAlreadyExistsException;
-import com.example.turing_beta.exception.exceptions.transactionType.TransactionTypeFieldsEmptyException;
-import com.example.turing_beta.exception.exceptions.transactionType.TransactionTypeNotFoundException;
+import com.example.turing_beta.exception.exceptions.common.ObjectAlreadyExistsException;
+import com.example.turing_beta.exception.exceptions.common.ObjectFieldsEmptyException;
+import com.example.turing_beta.exception.exceptions.common.ObjectNotFoundException;
 import com.example.turing_beta.repos.TransactionTypeRepo;
 import com.example.turing_beta.service.TransactionTypeService;
 import lombok.RequiredArgsConstructor;
@@ -27,13 +27,13 @@ public class TransactionTypeServiceImpl implements TransactionTypeService {
     @Override
     public TransactionType add(TransactionType transactionType) {
         if (transactionType.getId() != null && transactionTypeRepo.existsById(transactionType.getId())) {
-            throw new TransactionTypeAlreadyExistsException(String.format("Transaction type with id %d already exists", transactionType.getId()));
+            throw new ObjectAlreadyExistsException(String.format("Transaction type with id %d already exists", transactionType.getId()));
         }
         if (transactionType.getName() != null && transactionTypeRepo.existsByName(transactionType.getName())) {
-            throw new TransactionTypeAlreadyExistsException(String.format("Transaction type with name %s already exists", transactionType.getName()));
+            throw new ObjectAlreadyExistsException(String.format("Transaction type with name %s already exists", transactionType.getName()));
         }
 
-        transactionTypeRepo.save(transactionType);
+        transactionType = transactionTypeRepo.save(transactionType);
         return transactionType;
     }
 
@@ -41,7 +41,7 @@ public class TransactionTypeServiceImpl implements TransactionTypeService {
     public TransactionType getById(Long id) {
         Optional<TransactionType> foundTransactionType = transactionTypeRepo.findById(id);
         if (foundTransactionType.isEmpty()) {
-            throw new TransactionTypeNotFoundException(String.format("Could not find a transaction type with id %d", id));
+            throw new ObjectNotFoundException(String.format("Could not find a transaction type with id %d", id));
         }
         return foundTransactionType.get();
     }
@@ -51,9 +51,9 @@ public class TransactionTypeServiceImpl implements TransactionTypeService {
         TransactionType transactionTypeFromDb = getById(transactionType.getId());
 
         if (!StringUtils.hasText(transactionType.getName())) {
-            throw new TransactionTypeFieldsEmptyException("Transaction type name field is empty.");
+            throw new ObjectFieldsEmptyException("Transaction type name field is empty.");
         }
-        transactionTypeRepo.save(transactionType);
+        transactionType = transactionTypeRepo.save(transactionType);
         return transactionType;
     }
 
@@ -61,7 +61,7 @@ public class TransactionTypeServiceImpl implements TransactionTypeService {
     public TransactionType getByName(String name) {
         Optional<TransactionType> foundTransactionType = transactionTypeRepo.findByName(name);
         if (foundTransactionType.isEmpty()) {
-            throw new TransactionTypeNotFoundException(String.format("Could not find a transaction type with name %s", name));
+            throw new ObjectNotFoundException(String.format("Could not find a transaction type with name %s", name));
         }
         return foundTransactionType.get();
     }
