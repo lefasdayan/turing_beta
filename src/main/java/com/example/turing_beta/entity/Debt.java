@@ -19,9 +19,9 @@ public class Debt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "name", length = 100)
+    @Column(name = "name", length = 100, nullable = false)
     private String name;
-    @Column(name = "amount", precision = 10, scale = 2)
+    @Column(name = "amount", precision = 10, scale = 2, nullable = false)
     private BigDecimal amount;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "currency_id")

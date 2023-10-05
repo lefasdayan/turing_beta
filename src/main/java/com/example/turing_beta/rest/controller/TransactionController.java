@@ -1,4 +1,4 @@
-package com.example.turing_beta.rest;
+package com.example.turing_beta.rest.controller;
 
 import com.example.turing_beta.entity.Transaction;
 import com.example.turing_beta.service.TransactionService;

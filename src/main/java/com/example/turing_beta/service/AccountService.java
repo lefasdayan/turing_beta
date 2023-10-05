@@ -1,19 +1,22 @@
 package com.example.turing_beta.service;
 
-import com.example.turing_beta.entity.Account;
+import com.example.turing_beta.rest.dto.account.AccountAllFields;
+import com.example.turing_beta.rest.dto.account.NewAccountRequest;
+import com.example.turing_beta.rest.dto.account.NewAccountResponse;
+import com.example.turing_beta.rest.dto.account.UpdateAccountRequest;
 
 import java.util.List;
 
 public interface AccountService {
-    List<Account> getAll();
+    List<AccountAllFields> getAll();
 
-    Account add(Account account);
+    NewAccountResponse add(NewAccountRequest request);
 
-    Account getById(Long id);
+    AccountAllFields getById(Long id);
 
-    Account save(Account account);
+    AccountAllFields save(UpdateAccountRequest request);
 
     void deleteById(Long id);
 
-    Account getByName(String name);
+    AccountAllFields getByName(String name);
 }

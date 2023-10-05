@@ -3,9 +3,9 @@
 create TABLE public.debt
 (
     id          bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    "name"      varchar(100),
-    amount      numeric(10, 2),
-    currency_id bigint,
+    "name"      varchar(100) NOT NULL,
+    amount      numeric(10, 2) NOT NULL,
+    currency_id bigint NOT NULL,
     date_start  date,
     date_due    date,
     contact_id  bigint,
@@ -22,8 +22,8 @@ ALTER TABLE public.debt
 create TABLE public.currency
 (
     id               bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    "name"           varchar(70),
-    course_to_rubble numeric(12, 7),
+    "name"           varchar(70) NOT NULL,
+    course_to_rubble numeric(12, 7) NOT NULL,
     CONSTRAINT currency_pk PRIMARY KEY (id)
 );
 -- ddl-end --
@@ -36,9 +36,9 @@ ALTER TABLE public.currency
 create TABLE public.account
 (
     id          bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    "name"      varchar(50),
-    amount      numeric(10, 2),
-    currency_id bigint,
+    "name"      varchar(50) NOT NULL,
+    amount      numeric(10, 2) NOT NULL,
+    currency_id bigint NOT NULL,
     bank_name   varchar(50),
     CONSTRAINT account_pk PRIMARY KEY (id)
 );
@@ -52,7 +52,7 @@ ALTER TABLE public.account
 create TABLE public.debt_type
 (
     id     bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    "name" varchar(100),
+    "name" varchar(100) NOT NULL,
     note   varchar(240),
     CONSTRAINT debt_type_pk PRIMARY KEY (id)
 );
@@ -66,7 +66,7 @@ ALTER TABLE public.debt_type
 create TABLE public.contact
 (
     id               bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    "name"           varchar(140),
+    "name"           varchar(140) NOT NULL,
     ph_number        varchar(20),
     bank_card_number numeric(16),
     note             varchar(500),
@@ -86,9 +86,9 @@ ALTER TABLE public.contact
 create TABLE public.transaction
 (
     id          bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    "name"      varchar(50),
-    amount      numeric(10, 2),
-    currency_id bigint,
+    "name"      varchar(50) NOT NULL,
+    amount      numeric(10, 2) NOT NULL,
+    currency_id bigint NOT NULL,
     date_time   date,
     type_id     bigint,
     from_acc_id bigint,
@@ -122,7 +122,7 @@ ALTER TABLE public.debt_history
 create TABLE public.transaction_type
 (
     id     bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    "name" varchar(50),
+    "name" varchar(50) NOT NULL,
     note   varchar(240),
     CONSTRAINT transaction_type_pk PRIMARY KEY (id)
 );

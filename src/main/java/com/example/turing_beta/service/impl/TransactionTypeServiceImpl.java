@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -52,6 +53,11 @@ public class TransactionTypeServiceImpl implements TransactionTypeService {
 
         if (!StringUtils.hasText(transactionType.getName())) {
             throw new ObjectFieldsEmptyException("Transaction type name field is empty.");
+        }
+        if (transactionTypeRepo.findByName(transactionType.getName()).isPresent()
+                && !Objects.equals(transactionTypeRepo.findByName(transactionType.getName()).get().getId(), transactionType.getId())){ //todo перенести в метод checkFields
+            throw new ObjectAlreadyExistsException(String.format("Cannot save. " +
+                    "Transaction type with name %s already exists", transactionType.getName()));
         }
         transactionType = transactionTypeRepo.save(transactionType);
         return transactionType;

@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -50,7 +51,6 @@ public class DebtServiceImpl implements DebtService {
     public Debt save(Debt debt) {
         Debt debtFromDb = getById(debt.getId());
         checkFieldsValidity(debt);
-
         debt = debtRepo.save(debt);
         return debt;
     }
@@ -66,7 +66,8 @@ public class DebtServiceImpl implements DebtService {
         return debtRepo.findAllByContactId(id); //todo найти все долги какого-то контакта по его id
     }
 
-    private void checkFieldsValidity(Debt debt) throws ObjectFieldsEmptyException, AmountSetWrongException, DebtWrongDueDateException {
+    private void checkFieldsValidity(Debt debt) throws ObjectFieldsEmptyException, AmountSetWrongException,
+            DebtWrongDueDateException, ObjectAlreadyExistsException {
         if (!StringUtils.hasText(debt.getName())
                 || debt.getAmount() == null
                 || debt.getCurrency() == null) {
@@ -77,6 +78,11 @@ public class DebtServiceImpl implements DebtService {
         }
         if (debt.getDateDue().isBefore(debt.getDateStart())) {
             throw new DebtWrongDueDateException("Cannot add debt with due date earlier than date of start");
+        }
+        if (debtRepo.findByName(debt.getName()).isPresent()
+                && !Objects.equals(debtRepo.findByName(debt.getName()).get().getId(), debt.getId())){
+            throw new ObjectAlreadyExistsException(String.format("Cannot save. " +
+                    "Debt with name %s already exists", debt.getName()));
         }
     }
 }

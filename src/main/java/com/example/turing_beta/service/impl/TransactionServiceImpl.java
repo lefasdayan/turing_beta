@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -78,6 +79,11 @@ public class TransactionServiceImpl implements TransactionService {
         }
         if (transaction.getAmount().compareTo(BigDecimal.valueOf(0)) <= 0) {
             throw new AmountSetWrongException("Cannot add transaction with amount less than or equal to 0");
+        }
+        if (transactionRepo.findByName(transaction.getName()).isPresent()
+                && !Objects.equals(transactionRepo.findByName(transaction.getName()).get().getId(), transaction.getId())){
+            throw new ObjectAlreadyExistsException(String.format("Cannot save. " +
+                    "Transaction with name %s already exists", transaction.getName()));
         }
     }
 }

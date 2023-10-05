@@ -17,7 +17,7 @@ public class TransactionType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "name", length = 50)
+    @Column(name = "name", length = 50, nullable = false, unique = true)
     private String name;
     @Column(name = "note", length = 240)
     private String note;

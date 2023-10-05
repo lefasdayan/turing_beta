@@ -17,7 +17,7 @@ public class DebtType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "name", length = 100)
+    @Column(name = "name", length = 100, nullable = false)
     private String name;
     @Column(name = "note", length = 240)
     private String note;

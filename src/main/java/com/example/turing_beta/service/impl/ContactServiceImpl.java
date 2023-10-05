@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -37,6 +38,11 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Contact save(Contact contact) {
+        if (contactRepo.findByName(contact.getName()).isPresent()
+                && !Objects.equals(contactRepo.findByName(contact.getName()).get().getId(), contact.getId())){ //todo перенести в метод checkFieldsValidity
+            throw new ObjectAlreadyExistsException(String.format("Cannot save. " +
+                    "Contact with name %s already exists", contact.getName()));
+        }
         Contact contactFromDb = getById(contact.getId());
         if (!StringUtils.hasText(contact.getName())) {
             throw new ObjectFieldsEmptyException("Cannot add contact with empty field(s)");
@@ -66,6 +72,7 @@ public class ContactServiceImpl implements ContactService {
         if (foundContact.isEmpty()) {
             throw new ObjectNotFoundException(String.format("Cannot find contact with name %s", name));
         }
+
         return foundContact.get();
     }
 }

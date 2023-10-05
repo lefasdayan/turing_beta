@@ -1,6 +1,10 @@
-package com.example.turing_beta.rest;
+package com.example.turing_beta.rest.controller;
 
 import com.example.turing_beta.entity.Account;
+import com.example.turing_beta.rest.dto.account.AccountAllFields;
+import com.example.turing_beta.rest.dto.account.NewAccountRequest;
+import com.example.turing_beta.rest.dto.account.NewAccountResponse;
+import com.example.turing_beta.rest.dto.account.UpdateAccountRequest;
 import com.example.turing_beta.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,23 +20,23 @@ public class AccountController {
     private final AccountService accountService;
 
     @GetMapping
-    public ResponseEntity<List<Account>> getAllAccounts() {
+    public ResponseEntity<List<AccountAllFields>> getAllAccounts() {
         return ResponseEntity.ok(accountService.getAll());
     }
 
     @PostMapping
-    public ResponseEntity<Account> addAccount(@RequestBody Account account) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(accountService.add(account));
+    public ResponseEntity<NewAccountResponse> addAccount(@RequestBody NewAccountRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(accountService.add(request));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Account> getAccountById(@PathVariable Long id) {
+    public ResponseEntity<AccountAllFields> getAccountById(@PathVariable Long id) {
         return ResponseEntity.ok(accountService.getById(id));
     }
 
     @PatchMapping
-    public ResponseEntity<Account> updateAccount(@RequestBody Account account) {
-        return ResponseEntity.ok(accountService.save(account));
+    public ResponseEntity<AccountAllFields> updateAccount(@RequestBody UpdateAccountRequest request) {
+        return ResponseEntity.ok(accountService.save(request));
     }
 
     @DeleteMapping("/{id}")
@@ -42,7 +46,7 @@ public class AccountController {
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<Account> getAccountByName(@PathVariable String name) {
+    public ResponseEntity<AccountAllFields> getAccountByName(@PathVariable String name) {
         return ResponseEntity.ok(accountService.getByName(name));
     }
 }

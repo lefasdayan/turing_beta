@@ -18,7 +18,7 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "name", length = 140)
+    @Column(name = "name", length = 140, nullable = false, unique = true)
     private String name;
     @Column(name = "ph_number", length = 20)
     private String phoneNumber;
