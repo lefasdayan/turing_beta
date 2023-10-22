@@ -1,0 +1,1 @@
+insert into currency (name, course_to_rubble) values ('Rubble', 90.5); commit;
