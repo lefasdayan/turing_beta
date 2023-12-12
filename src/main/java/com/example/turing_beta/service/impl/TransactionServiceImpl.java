@@ -31,6 +31,14 @@ public class TransactionServiceImpl implements TransactionService {
     public Transaction add(Transaction transaction) {
         checkFieldsValidity(transaction);
 
+        if (transaction.getFromAcc() != null) {
+            transaction.getFromAcc().setAmount(transaction.getFromAcc().getAmount().subtract(transaction.getAmount()));
+        }
+
+        if (transaction.getToAcc() != null) {
+            transaction.getToAcc().setAmount(transaction.getToAcc().getAmount().add(transaction.getAmount()));
+        }
+
         transaction = transactionRepo.save(transaction);
         return transaction;
     }
@@ -50,13 +58,30 @@ public class TransactionServiceImpl implements TransactionService {
 
         checkFieldsValidity(transaction);
 
+        if (transaction.getFromAcc() != null) {
+            transaction.getFromAcc().setAmount(transaction.getFromAcc().getAmount().add(transactionFromDb.getAmount()).subtract(transaction.getAmount()));
+        }
+
+        if (transaction.getToAcc() != null) {
+            transaction.getToAcc().setAmount(transaction.getToAcc().getAmount().subtract(transactionFromDb.getAmount()).add(transaction.getAmount()));
+        }
+
         transaction = transactionRepo.save(transaction);
         return transaction;
     }
 
     @Override
     public void deleteById(Long id) {
-        Transaction transaction = getById(id);
+        Transaction transactionFromDb = getById(id);
+
+        if (transactionFromDb.getFromAcc() != null) {
+            transactionFromDb.getFromAcc().setAmount(transactionFromDb.getFromAcc().getAmount().add(transactionFromDb.getAmount()));
+        }
+
+        if (transactionFromDb.getToAcc() != null) {
+            transactionFromDb.getToAcc().setAmount(transactionFromDb.getToAcc().getAmount().subtract(transactionFromDb.getAmount()));
+        }
+
         transactionRepo.deleteById(id);
     }
 
@@ -81,7 +106,7 @@ public class TransactionServiceImpl implements TransactionService {
             throw new AmountSetWrongException("Cannot add transaction with amount less than or equal to 0");
         }
         if (transactionRepo.findByName(transaction.getName()).isPresent()
-                && !Objects.equals(transactionRepo.findByName(transaction.getName()).get().getId(), transaction.getId())){
+                && !Objects.equals(transactionRepo.findByName(transaction.getName()).get().getId(), transaction.getId())) {
             throw new ObjectAlreadyExistsException(String.format("Cannot save. " +
                     "Transaction with name %s already exists", transaction.getName()));
         }
