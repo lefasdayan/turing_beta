@@ -21,6 +21,8 @@ public class Currency {
     private String name;
     @Column(name = "course_to_rubble", precision = 12, scale = 7, nullable = false, unique = true)
     private BigDecimal courseToRubble;
+    @Column(name = "api_code", length = 3, nullable = false)
+    private String apiCode;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "currency")
     @ToString.Exclude
     private List<Account> accounts;
