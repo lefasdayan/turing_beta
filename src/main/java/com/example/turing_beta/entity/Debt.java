@@ -1,9 +1,7 @@
 package com.example.turing_beta.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,6 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Debt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +35,7 @@ public class Debt {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id")
     private DebtType debtType;
+    @ToString.Exclude
     @ManyToMany
     @JoinTable(
             name = "debt_history",
@@ -43,4 +43,18 @@ public class Debt {
             joinColumns = @JoinColumn(name = "debt_id")
     )
     private List<Transaction> transactions;
+
+    public List<Transaction> addTransaction(Transaction transaction){
+        this.transactions.add(transaction);
+        transaction.getDebts().add(this);
+
+        return this.transactions;
+    }
+
+    public List<Transaction> deleteTransaction(Transaction transaction){
+        this.transactions.add(transaction);
+        transaction.getDebts().remove(this);
+
+        return  this.transactions;
+    }
 }
