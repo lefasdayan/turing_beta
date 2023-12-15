@@ -112,7 +112,7 @@ public class TransactionServiceImpl implements TransactionService {
         if (transaction.getFromAcc() == null && transaction.getToAcc() == null) {
             throw new TransactionCredentialsSetWrongException("Cannot add transaction without any account assigned");
         }
-        if (transaction.getFromAcc().equals(transaction.getToAcc())) {
+        if (transaction.getFromAcc() != null && transaction.getFromAcc().equals(transaction.getToAcc())) {
             throw new TransactionCredentialsSetWrongException("Cannot transfer money from and to the same account");
         }
         if (transaction.getAmount().compareTo(BigDecimal.valueOf(0)) <= 0) {
@@ -167,14 +167,14 @@ public class TransactionServiceImpl implements TransactionService {
                     System.out.println("Введите id счета, с которого переводились деньги (0, если было зачисление)");
                     long fromAccId = sc.nextLong();
                     Account fromAccount = null;
-                    if (fromAccId != 0L){
-                       fromAccount = accountService.getById(fromAccId);
+                    if (fromAccId != 0L) {
+                        fromAccount = accountService.getById(fromAccId);
                     }
 
                     System.out.println("Введите id счета, на который переводились деньги (0, если было списание)");
                     long toAccId = sc.nextLong();
                     Account toAccount = null;
-                    if (toAccId != 0L){
+                    if (toAccId != 0L) {
                         toAccount = accountService.getById(toAccId);
                     }
 
@@ -246,7 +246,7 @@ public class TransactionServiceImpl implements TransactionService {
                                 System.out.println("Введите новый id счета, с которого переводились деньги (0, если было зачисление)");
                                 long newFromAccId = sc.nextLong();
                                 Account newFromAccount = null;
-                                if (newFromAccId != 0L){
+                                if (newFromAccId != 0L) {
                                     newFromAccount = accountService.getById(newFromAccId);
                                 }
                                 transaction.setFromAcc(newFromAccount);
@@ -257,7 +257,7 @@ public class TransactionServiceImpl implements TransactionService {
                                 System.out.println("Введите новый id счета, на который переводились деньги (0, если было списание)");
                                 long newToAccId = sc.nextLong();
                                 Account newToAccount = null;
-                                if (newToAccId != 0L){
+                                if (newToAccId != 0L) {
                                     newToAccount = accountService.getById(newToAccId);
                                 }
                                 transaction.setToAcc(newToAccount);
